@@ -4,7 +4,7 @@
 
 #include "particle_filter.h"
 
-void particle_filter::pf_localization(const std::vector<Eigen::RowVector3f>& z,
+void particle_filter::pf_localization(const std::vector<Eigen::RowVector4f>& z,
                                       const VEC_INPUT& ud) {
 
         for(int ip=0; ip<NP; ip++){
@@ -14,12 +14,13 @@ void particle_filter::pf_localization(const std::vector<Eigen::RowVector3f>& z,
             x = motion_model(x, ud);
 
             for(unsigned int i=0; i<z.size(); i++){
-                Eigen::RowVector3f item = z[i];
+                Eigen::RowVector4f item = z[i];
                 float dx = x(0) - item(1);
                 float dy = x(1) - item(2);
-                float prez = std::sqrt(dx*dx + dy*dy);
-                float dz = prez - item(0);
-                w = w * gauss_likelihood(dz, std::sqrt(Q));
+                float dz = x(2) - item(3);
+                float prez = std::sqrt(dx*dx + dy*dy + dz * dz);
+                float xdz = prez - item(0);
+                w = w * gauss_likelihood(xdz, std::sqrt(Q));
             }
             px_.col(ip) = x;
             pw_(ip) = w;
@@ -96,11 +97,12 @@ filter_base(dt) {
     pw_ = MAT_WEIGHTS::Ones() * 1.0/NP;
 }
 
-void particle_filter::update(const std::vector<Eigen::RowVector3f>& z, const VEC_INPUT& ud) {
+void particle_filter::update(const std::vector<Eigen::RowVector4f>& z, const VEC_INPUT& ud) {
 
     xEst_ = motion_model(xEst_, ud);
     pf_localization(z, ud);
     pf_resampling();
+//    std::cout << "[state] " << xEst_.transpose() << std::endl;
     std::cout << "[state] " << observation_model(xEst_).transpose() << std::endl;
 
 }

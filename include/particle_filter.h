@@ -20,7 +20,7 @@ public:
     explicit particle_filter(float dt);
 
 
-    void update(const std::vector<Eigen::RowVector3f>& z, const Eigen::Vector2f& ud);
+    void update(const std::vector<Eigen::RowVector4f>& z, const VEC_INPUT& ud);
     Eigen::VectorXf getState();
 
 
@@ -43,7 +43,7 @@ private:
 
 
 private:
-    void pf_localization(const std::vector<Eigen::RowVector3f>& z,
+    void pf_localization(const std::vector<Eigen::RowVector4f>& z,
                          const VEC_INPUT& ud
     );
 

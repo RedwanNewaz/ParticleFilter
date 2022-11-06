@@ -11,8 +11,8 @@
 #include<Eigen/Eigen>
 #include <memory>
 
-#define STATE_DIM 4
-#define INPUT_DIM 2
+#define STATE_DIM 12
+#define INPUT_DIM 4
 
 
 // [x, y, z, p, q, r, x_dot, y_dot, z_dot, p_dot, q_dot, r_dot]
@@ -26,9 +26,9 @@ public:
 
     filter_base(float dt);
 
-    Eigen::Vector4f motion_model(const VEC_STATE& x, const VEC_INPUT& u);
+    Eigen::VectorXf motion_model(const VEC_STATE& x, const VEC_INPUT& u);
 
-    Eigen::Vector2f observation_model(const VEC_STATE& x);
+    Eigen::VectorXf observation_model(const VEC_STATE& x);
 
 private:
     float dt_;
