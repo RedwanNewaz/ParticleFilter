@@ -4,13 +4,10 @@
 #include "filter_base.h"
 
 Eigen::Vector4f filter_base::motion_model(const VEC_STATE& x, const VEC_INPUT& u) {
-    Eigen::Matrix4f F_;
-    F_<<1.0,   0,   0,   0,
-            0, 1.0,   0,   0,
-            0,   0, 1.0,   0,
-            0,   0,   0, 1.0;
+    MAT_COV F_ = MAT_COV::Identity();
 
-    Eigen::Matrix<float, 4, 2> B_;
+
+    Eigen::Matrix<float, STATE_DIM, INPUT_DIM> B_;
     B_<< dt_ * std::cos(x(2,0)),  0,
             dt_ * std::sin(x(2,0)),  0,
             0.0,  dt_,
@@ -33,7 +30,7 @@ float filter_base::perturbation(int NP) {
 }
 
 Eigen::Vector2f filter_base::observation_model(const VEC_STATE& x) {
-    Eigen::Matrix<float, 2, 4> H_;
+    Eigen::Matrix<float, INPUT_DIM, STATE_DIM> H_;
     H_<< 1, 0, 0, 0,
             0, 1, 0, 0;
     return H_ * x;

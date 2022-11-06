@@ -10,13 +10,15 @@
 #define MAX_RANGE 20.0
 #define NP 100
 #define NTh NP/2
-#define STATE_DIM 4
+
 
 class particle_filter : public filter_base{
+
     using MAT_PARTICLES = Eigen::Matrix<float, STATE_DIM, NP>;
     using MAT_WEIGHTS = Eigen::Matrix<float, NP, 1>;
 public:
     explicit particle_filter(float dt);
+
 
     void update(const std::vector<Eigen::RowVector3f>& z, const Eigen::Vector2f& ud);
     Eigen::VectorXf getState();
@@ -38,6 +40,7 @@ private:
     MAT_COV PEst_;
     MAT_PARTICLES px_;
     MAT_WEIGHTS pw_;
+
 
 private:
     void pf_localization(const std::vector<Eigen::RowVector3f>& z,

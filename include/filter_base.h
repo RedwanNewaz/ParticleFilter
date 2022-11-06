@@ -11,13 +11,18 @@
 #include<Eigen/Eigen>
 #include <memory>
 
+#define STATE_DIM 4
+#define INPUT_DIM 2
+
+
+// [x, y, z, p, q, r, x_dot, y_dot, z_dot, p_dot, q_dot, r_dot]
 
 
 class filter_base{
 public:
-    using VEC_STATE = Eigen::Vector4f;
-    using MAT_COV = Eigen::Matrix4f;
-    using VEC_INPUT = Eigen::Vector2f;
+    using VEC_STATE = Eigen::Vector<float, STATE_DIM>;
+    using MAT_COV = Eigen::Matrix<float, STATE_DIM, STATE_DIM>;
+    using VEC_INPUT = Eigen::Vector<float, INPUT_DIM>;
 
     filter_base(float dt);
 
